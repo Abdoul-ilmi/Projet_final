@@ -1,0 +1,65 @@
+<!-- Tableau de gestion du catalogue et confirmation des suppressions. -->
+<section class="page">
+  <header class="page__entete page__entete--ligne">
+    <div>
+      <h1>Gestion du catalogue</h1>
+      <p class="page__intro">Créez, modifiez ou supprimez les fiches de matériel.</p>
+    </div>
+    <a class="bouton" routerLink="/gestion/nouveau">Ajouter un équipement</a>
+  </header>
+
+  @if (aSupprimer(); as cible) {
+    <div class="confirmation" role="alertdialog" aria-labelledby="titre-confirmation" aria-describedby="texte-confirmation">
+      <h2 id="titre-confirmation">Confirmer la suppression</h2>
+      <p id="texte-confirmation">
+        Voulez-vous vraiment supprimer « {{ cible.nom }} » ? Cette action est définitive.
+      </p>
+      <div class="actions">
+        <button type="button" class="bouton bouton--danger" (click)="confirmerSuppression()">
+          Supprimer définitivement
+        </button>
+        <button type="button" class="bouton bouton--secondaire" (click)="annulerSuppression()">Annuler</button>
+      </div>
+    </div>
+  }
+
+  @if (equipements().length === 0) {
+    <div class="message message--info">
+      <p>Le catalogue ne contient aucun équipement.</p>
+      <a routerLink="/gestion/nouveau">Ajouter le premier équipement</a>
+    </div>
+  } @else {
+    <div class="tableau-conteneur">
+      <table class="tableau">
+        <caption class="sr-only">Liste des équipements du catalogue</caption>
+        <thead>
+          <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Catégorie</th>
+            <th scope="col">Localisation</th>
+            <th scope="col">État</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (equipement of equipements(); track equipement.id) {
+            <tr>
+              <th scope="row">{{ equipement.nom }}</th>
+              <td>{{ equipement.categorie }}</td>
+              <td>{{ equipement.localisation }}</td>
+              <td><app-badge-disponibilite [disponible]="estDisponible(equipement)" /></td>
+              <td class="tableau__actions">
+                <a class="bouton bouton--secondaire bouton--petit" [routerLink]="['/gestion', equipement.id, 'modifier']">
+                  Modifier<span class="sr-only"> {{ equipement.nom }}</span>
+                </a>
+                <button type="button" class="bouton bouton--danger-doux bouton--petit" (click)="demanderSuppression(equipement)">
+                  Supprimer<span class="sr-only"> {{ equipement.nom }}</span>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

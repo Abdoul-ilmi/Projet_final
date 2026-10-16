@@ -1,0 +1,31 @@
+<!-- Formulaire de création ou modification réservé au responsable. -->
+<section class="page page--etroite">
+  <p><a class="lien-retour" routerLink="/gestion">← Retour à la gestion</a></p>
+
+  @if (!modeModification()) {
+    <header class="page__entete">
+      <h1>Nouvel équipement</h1>
+      <p class="page__intro">Chaque fiche représente un exemplaire physique. Les champs marqués * sont obligatoires.</p>
+    </header>
+    <app-formulaire-materiel [categories]="catalogue.categories" (soumis)="enregistrer($event)" (annule)="retour()" />
+  } @else {
+    @if (equipement(); as eq) {
+      <header class="page__entete">
+        <h1>Modifier « {{ eq.nom }} »</h1>
+        <p class="page__intro">Référence n° {{ eq.id }}. Les champs marqués * sont obligatoires.</p>
+      </header>
+      <app-formulaire-materiel
+        [equipement]="eq"
+        [categories]="catalogue.categories"
+        (soumis)="enregistrer($event)"
+        (annule)="retour()"
+      />
+    } @else {
+      <div class="message message--erreur" role="alert">
+        <h1 class="message__titre">Équipement introuvable</h1>
+        <p>Aucun équipement ne correspond à l'identifiant « {{ id() }} ». Il a peut-être été supprimé.</p>
+        <a class="bouton bouton--secondaire" routerLink="/gestion">Retourner à la gestion</a>
+      </div>
+    }
+  }
+</section>

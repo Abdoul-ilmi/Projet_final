@@ -1,0 +1,73 @@
+<!-- Formulaire réactif partagé par la création et la modification. -->
+<form class="formulaire" [formGroup]="formulaire" (ngSubmit)="soumettre()" novalidate>
+  <div class="champ">
+    <label for="champ-nom">Nom <span aria-hidden="true">*</span></label>
+    <input
+      id="champ-nom"
+      type="text"
+      formControlName="nom"
+      autocomplete="off"
+      aria-describedby="aide-nom erreur-nom"
+      [attr.aria-invalid]="messageErreur('nom') ? 'true' : null"
+    />
+    <p class="champ__aide" id="aide-nom">Au moins 3 caractères.</p>
+    @if (messageErreur('nom'); as erreur) {
+      <p class="champ__erreur" id="erreur-nom">{{ erreur }}</p>
+    }
+  </div>
+
+  <div class="champ">
+    <label for="champ-categorie">Catégorie <span aria-hidden="true">*</span></label>
+    <select
+      id="champ-categorie"
+      formControlName="categorie"
+      aria-describedby="erreur-categorie"
+      [attr.aria-invalid]="messageErreur('categorie') ? 'true' : null"
+    >
+      <option value="">— Choisir une catégorie —</option>
+      @for (categorie of categories(); track categorie) {
+        <option [value]="categorie">{{ categorie }}</option>
+      }
+    </select>
+    @if (messageErreur('categorie'); as erreur) {
+      <p class="champ__erreur" id="erreur-categorie">{{ erreur }}</p>
+    }
+  </div>
+
+  <div class="champ">
+    <label for="champ-description">Description <span aria-hidden="true">*</span></label>
+    <textarea
+      id="champ-description"
+      rows="4"
+      formControlName="description"
+      aria-describedby="aide-description erreur-description"
+      [attr.aria-invalid]="messageErreur('description') ? 'true' : null"
+    ></textarea>
+    <p class="champ__aide" id="aide-description">Au moins 10 caractères (accessoires fournis, état…).</p>
+    @if (messageErreur('description'); as erreur) {
+      <p class="champ__erreur" id="erreur-description">{{ erreur }}</p>
+    }
+  </div>
+
+  <div class="champ">
+    <label for="champ-localisation">Localisation <span aria-hidden="true">*</span></label>
+    <input
+      id="champ-localisation"
+      type="text"
+      formControlName="localisation"
+      autocomplete="off"
+      aria-describedby="erreur-localisation"
+      [attr.aria-invalid]="messageErreur('localisation') ? 'true' : null"
+    />
+    @if (messageErreur('localisation'); as erreur) {
+      <p class="champ__erreur" id="erreur-localisation">{{ erreur }}</p>
+    }
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="bouton">
+      {{ equipement() ? 'Enregistrer les modifications' : "Créer l'équipement" }}
+    </button>
+    <button type="button" class="bouton bouton--secondaire" (click)="annule.emit()">Annuler</button>
+  </div>
+</form>
