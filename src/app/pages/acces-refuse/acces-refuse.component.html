@@ -1,0 +1,14 @@
+<!-- Explication affichée lorsqu'un utilisateur n'a pas le rôle requis. -->
+<section class="page page--etroite">
+  <div class="message message--erreur" role="alert">
+    <h1 class="message__titre">Accès refusé</h1>
+    <p>{{ explication() }}</p>
+    @if (session.utilisateur(); as utilisateur) {
+      <p>Vous êtes connecté en tant que {{ utilisateur.nom }}.</p>
+    }
+  </div>
+  <div class="actions">
+    <a class="bouton" routerLink="/">Retour à l'accueil</a>
+    <a class="bouton bouton--secondaire" routerLink="/login">Changer de compte</a>
+  </div>
+</section>

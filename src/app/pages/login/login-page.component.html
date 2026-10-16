@@ -1,0 +1,30 @@
+<!-- Sélection d'un compte de démonstration pour ouvrir une session. -->
+<section class="page page--etroite">
+  <header class="page__entete">
+    <h1>Connexion</h1>
+    <p class="page__intro">
+      Choisissez un compte de démonstration pour accéder à l'application.
+      Aucun mot de passe n'est demandé.
+    </p>
+  </header>
+
+  @if (session.utilisateur(); as courant) {
+    <p class="message message--info">
+      Vous êtes actuellement connecté en tant que <strong>{{ courant.nom }}</strong>.
+      Choisir un autre compte change de profil.
+    </p>
+  }
+
+  <ul class="liste-comptes">
+    @for (compte of session.comptes; track compte.id) {
+      <li>
+        <button type="button" class="compte" (click)="choisir(compte)">
+          <span class="compte__nom">{{ compte.nom }}</span>
+          <span class="compte__role" [class.compte__role--responsable]="compte.role === 'manager'">
+            {{ libellesRole[compte.role] }}
+          </span>
+        </button>
+      </li>
+    }
+  </ul>
+</section>
