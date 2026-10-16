@@ -1,0 +1,48 @@
+<!-- Navigation latérale adaptée au rôle de l'utilisateur connecté. -->
+<aside class="lateral">
+  <a class="lateral__marque" routerLink="/">
+    <span class="lateral__logo" aria-hidden="true">◆</span>
+    Campus Matériel
+  </a>
+
+  <nav class="nav" aria-label="Navigation principale">
+    @if (session.estConnecte()) {
+      <a routerLink="/catalogue" routerLinkActive="actif" ariaCurrentWhenActive="page">
+        <span class="nav__icone" aria-hidden="true">▦</span>
+        Catalogue
+      </a>
+    }
+    @if (session.estEtudiant()) {
+      <a routerLink="/mes-reservations" routerLinkActive="actif" ariaCurrentWhenActive="page">
+        <span class="nav__icone" aria-hidden="true">★</span>
+        Mes réservations
+        @if (reservations.mesReservations().length > 0) {
+          <span class="nav__compteur">{{ reservations.mesReservations().length }}</span>
+        }
+      </a>
+    }
+    @if (session.estResponsable()) {
+      <a routerLink="/gestion" routerLinkActive="actif" ariaCurrentWhenActive="page">
+        <span class="nav__icone" aria-hidden="true">✎</span>
+        Gestion
+      </a>
+    }
+  </nav>
+
+  <div class="lateral__session">
+    @if (session.utilisateur(); as utilisateur) {
+      <span class="lateral__utilisateur">
+        <span class="lateral__avatar" aria-hidden="true">{{ utilisateur.nom.charAt(0) }}</span>
+        <span>
+          {{ utilisateur.nom }}
+          <small>{{ libellesRole[utilisateur.role] }}</small>
+        </span>
+      </span>
+      <button type="button" class="bouton bouton--secondaire bouton--petit" (click)="deconnecter()">
+        Se déconnecter
+      </button>
+    } @else {
+      <a class="bouton bouton--secondaire bouton--petit" routerLink="/login">Connexion</a>
+    }
+  </div>
+</aside>

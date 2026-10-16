@@ -1,0 +1,20 @@
+<!-- Structure globale : navigation, notifications, contenu routé et pied de page. -->
+<!-- Lien d'évitement pour la navigation au clavier : saute directement au contenu -->
+<a class="lien-evitement" href="#contenu" (click)="$event.preventDefault(); contenu.focus()">
+  Aller au contenu
+</a>
+
+<div class="appli">
+  <app-barre-navigation />
+
+  <div class="zone">
+    <main id="contenu" #contenu class="conteneur" tabindex="-1">
+      <app-bandeau-notification />
+      <router-outlet />
+    </main>
+
+    <footer class="pied">
+      Campus Matériel — application de démonstration. Les données sont conservées localement dans ce navigateur.
+    </footer>
+  </div>
+</div>
