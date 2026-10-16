@@ -1,0 +1,63 @@
+<!-- Fiche détaillée et zone de réservation de l'équipement. -->
+<section class="page">
+  <p><a class="lien-retour" routerLink="/catalogue">← Retour au catalogue</a></p>
+
+  @if (equipement(); as eq) {
+    <article class="fiche">
+      <header class="fiche__entete">
+        <div>
+          <span class="etiquette">{{ eq.categorie }}</span>
+          <h1>{{ eq.nom }}</h1>
+        </div>
+        <app-badge-disponibilite [disponible]="!estReserve()" />
+      </header>
+
+      <dl class="fiche__details">
+        <div>
+          <dt>Description</dt>
+          <dd>{{ eq.description }}</dd>
+        </div>
+        <div>
+          <dt>Localisation</dt>
+          <dd>{{ eq.localisation }}</dd>
+        </div>
+        <div>
+          <dt>Référence</dt>
+          <dd>n° {{ eq.id }}</dd>
+        </div>
+      </dl>
+
+      <section class="fiche__reservation" aria-labelledby="titre-reservation">
+        <h2 id="titre-reservation">Réservation</h2>
+
+        @if (session.estEtudiant()) {
+          @if (!estReserve()) {
+            <p>Ce matériel est libre. Il restera à votre nom jusqu'à ce que vous annuliez la réservation.</p>
+            <button type="button" class="bouton" (click)="reserver()">Réserver ce matériel</button>
+          } @else if (reserveParMoi()) {
+            <p class="message message--succes">Vous avez réservé ce matériel.</p>
+            <a class="bouton bouton--secondaire" routerLink="/mes-reservations">Voir mes réservations</a>
+          } @else {
+            <p class="message message--avertissement">
+              Ce matériel est déjà réservé par un autre étudiant. Il sera réservable de nouveau dès son retour.
+            </p>
+          }
+        } @else {
+          <p class="message message--info">
+            La réservation est réservée aux étudiants.
+            @if (estReserve()) {
+              Ce matériel est actuellement réservé.
+            }
+          </p>
+          <a class="bouton bouton--secondaire" [routerLink]="['/gestion', eq.id, 'modifier']">Modifier la fiche</a>
+        }
+      </section>
+    </article>
+  } @else {
+    <div class="message message--erreur" role="alert">
+      <h1 class="message__titre">Équipement introuvable</h1>
+      <p>Aucun équipement ne correspond à l'identifiant « {{ id() }} ». Il a peut-être été supprimé.</p>
+      <a class="bouton bouton--secondaire" routerLink="/catalogue">Retourner au catalogue</a>
+    </div>
+  }
+</section>

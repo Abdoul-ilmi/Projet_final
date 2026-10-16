@@ -1,0 +1,26 @@
+<!-- Carte de présentation d'un équipement et de ses actions disponibles. -->
+<article class="carte">
+  <div class="carte__entete">
+    <span class="carte__initiale" aria-hidden="true">{{ equipement().categorie.charAt(0) }}</span>
+    <app-badge-disponibilite [disponible]="disponible()" />
+  </div>
+
+  <span class="etiquette carte__categorie">{{ equipement().categorie }}</span>
+
+  <h2 class="carte__titre">
+    <a [routerLink]="['/materiels', equipement().id]">{{ equipement().nom }}</a>
+  </h2>
+  <p class="carte__description">{{ equipement().description }}</p>
+  <p class="carte__lieu"><span class="carte__lieu-label">Lieu</span> {{ equipement().localisation }}</p>
+
+  <div class="carte__actions">
+    <a class="bouton bouton--secondaire bouton--petit" [routerLink]="['/materiels', equipement().id]">
+      Voir la fiche<span class="sr-only"> de {{ equipement().nom }}</span>
+    </a>
+    @if (reservable()) {
+      <button type="button" class="bouton bouton--petit" (click)="demandeReservation.emit(equipement())">
+        Réserver<span class="sr-only"> {{ equipement().nom }}</span>
+      </button>
+    }
+  </div>
+</article>

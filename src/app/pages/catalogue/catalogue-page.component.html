@@ -1,0 +1,70 @@
+<!-- Vue du catalogue avec recherche, filtre et accès aux fiches. -->
+<section class="page">
+  <header class="page__entete">
+    <h1>Catalogue du matériel</h1>
+    <p class="page__intro">
+      Recherchez un équipement, filtrez par catégorie, puis ouvrez sa fiche ou réservez-le directement.
+    </p>
+  </header>
+
+  <form class="filtres" role="search" aria-label="Filtrer le catalogue" (submit)="$event.preventDefault()">
+    <div class="champ">
+      <label for="recherche">Rechercher par nom</label>
+      <input
+        id="recherche"
+        type="search"
+        autocomplete="off"
+        placeholder="Ex. : ordinateur, micro…"
+        [value]="recherche()"
+        (input)="surRecherche($event)"
+      />
+    </div>
+    <div class="champ">
+      <label for="filtre-categorie">Catégorie</label>
+      <select id="filtre-categorie" (change)="surCategorie($event)">
+        <option value="" [selected]="categorie() === ''">Toutes les catégories</option>
+        @for (c of catalogue.categories; track c) {
+          <option [value]="c" [selected]="categorie() === c">{{ c }}</option>
+        }
+      </select>
+    </div>
+    <button type="button" class="bouton bouton--secondaire" [disabled]="!filtresActifs()" (click)="reinitialiser()">
+      Réinitialiser
+    </button>
+  </form>
+
+  <p class="compteur" aria-live="polite">
+    {{ resultats().length }} équipement{{ resultats().length > 1 ? 's' : '' }} affiché{{ resultats().length > 1 ? 's' : '' }}
+    sur {{ catalogue.equipements().length }}
+  </p>
+
+  @if (catalogue.equipements().length === 0) {
+    <div class="message message--info">
+      <p>Le catalogue est vide pour le moment.</p>
+      @if (session.estResponsable()) {
+        <p><a routerLink="/gestion/nouveau">Ajouter le premier équipement</a></p>
+      }
+    </div>
+  } @else if (resultats().length === 0) {
+    <div class="message message--info">
+      <p>Aucun équipement ne correspond à votre recherche.</p>
+      <p>Essayez un autre mot-clé ou une autre catégorie.</p>
+      <button type="button" class="bouton bouton--secondaire bouton--petit" (click)="reinitialiser()">
+        Afficher tout le catalogue
+      </button>
+    </div>
+  } @else {
+    <ul class="grille">
+      @for (equipement of resultats(); track equipement.id) {
+        <li>
+          <app-carte-materiel
+            [equipement]="equipement"
+            [disponible]="estDisponible(equipement)"
+            [reservable]="peutReserver(equipement)"
+            (demandeReservation)="reserver($event)"
+          />
+        </li>
+      }
+    </ul>
+  }
+</section>
