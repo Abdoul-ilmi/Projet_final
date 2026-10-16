@@ -169,3 +169,5 @@ L'annulation suit le même chemin dans l'autre sens : contrôle de propriété �
 - Un identifiant d'équipement supprimé en dernier peut être attribué à un nouvel équipement (aucune réservation ne peut le référencer, la suppression d'un équipement réservé étant interdite).
 - Pas de tests automatisés : la vérification se fait avec le scénario manuel du §7.
 - Extensions facultatives non réalisées : filtre conservé dans l'URL, retour à la page demandée après connexion, compteur par catégorie, bouton de réinitialisation des données de démonstration.
+#   P r o j e t _ f i n a l  
+ 
