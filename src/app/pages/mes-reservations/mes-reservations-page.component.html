@@ -1,0 +1,30 @@
+<!-- Liste des réservations de l'étudiant connecté. -->
+<section class="page">
+  <header class="page__entete">
+    <h1>Mes réservations</h1>
+    <p class="page__intro">Le matériel ci-dessous est réservé à votre nom jusqu'à l'annulation.</p>
+  </header>
+
+  @if (lignes().length === 0) {
+    <div class="message message--info">
+      <p>Vous n'avez aucune réservation pour le moment.</p>
+      <a class="bouton bouton--secondaire bouton--petit" routerLink="/catalogue">Parcourir le catalogue</a>
+    </div>
+  } @else {
+    <ul class="liste-reservations">
+      @for (ligne of lignes(); track ligne.reservation.id) {
+        <li class="reservation">
+          <div>
+            <h2 class="reservation__titre">
+              <a [routerLink]="['/materiels', ligne.equipement.id]">{{ ligne.equipement.nom }}</a>
+            </h2>
+            <p class="reservation__lieu">{{ ligne.equipement.categorie }} · {{ ligne.equipement.localisation }}</p>
+          </div>
+          <button type="button" class="bouton bouton--danger-doux" (click)="annuler(ligne.reservation.id)">
+            Annuler<span class="sr-only"> la réservation de {{ ligne.equipement.nom }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</section>

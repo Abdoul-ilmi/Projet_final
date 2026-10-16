@@ -1,0 +1,14 @@
+<!-- Bandeau affichant la notification actuellement publiée par le service. -->
+@if (notifications.courante(); as notification) {
+  <!-- role="alert" pour les erreurs (annoncées immédiatement), role="status" pour le reste -->
+  <div
+    class="notification"
+    [class]="'notification notification--' + notification.type"
+    [attr.role]="notification.type === 'erreur' ? 'alert' : 'status'"
+  >
+    <p>{{ notification.texte }}</p>
+    <button type="button" class="notification__fermer" (click)="notifications.fermer()" aria-label="Fermer le message">
+      ×
+    </button>
+  </div>
+}
